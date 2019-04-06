@@ -1,13 +1,21 @@
-----------------------------
---(Made By Qalle)--
-----------------------------
+local ESX = nil
 
-ESX               = nil
+TriggerEvent('esx:getSharedObject', function(obj) 
+    ESX = obj 
+end)
 
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+ESX.RegisterServerCallback("esx_marker:fetchUserRank", function(source, cb)
+    local player = ESX.GetPlayerFromId(source)
 
-ESX.RegisterServerCallback('esx_marker:getUsergroup', function(source, cb)
-  local xPlayer = ESX.GetPlayerFromId(source)
-  local group = xPlayer.getGroup()
-  cb(group)
+    if player ~= nil then
+        local playerGroup = player.getGroup()
+
+        if playerGroup ~= nil then 
+            cb(playerGroup)
+        else
+            cb("user")
+        end
+    else
+        cb("user")
+    end
 end)

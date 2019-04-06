@@ -1,10 +1,16 @@
 # esx_marker
-Makes you tp to marker with /tpm
 
-Drag it into resources
+[REQUIREMENTS]
+  
+* ESX
+  
+[USAGE]
 
-Add this line to server.cfg
-start esx_marker
+* Type /tpm to teleport to your waypoint.
 
-Done!
-/tpm ingame
+[INSTALLATION]
+
+1) Drag the resource in to your [resources] folder
+
+2) Add this in your server.cfg (under esx)
+``start esx_marker``
