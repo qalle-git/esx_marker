@@ -20,22 +20,21 @@ TeleportToWaypoint = function()
             local WaypointHandle = GetFirstBlipInfoId(8)
 
             if DoesBlipExist(WaypointHandle) then
-                local waypointCoords = GetBlipInfoIdCoord(WaypointHandle)
-
-                for height = 1, 1000 do
-                    SetPedCoordsKeepVehicle(PlayerPedId(), waypointCoords["x"], waypointCoords["y"], height + 0.0)
-
-                    local foundGround, zPos = GetGroundZFor_3dCoord(waypointCoords["x"], waypointCoords["y"], height + 0.0)
-
-                    if foundGround then
-                        SetPedCoordsKeepVehicle(PlayerPedId(), waypointCoords["x"], waypointCoords["y"], height + 0.0)
-
-                        break
-                    end
-
-                    Citizen.Wait(5)
-                end
-
+                local coords = GetBlipInfoIdCoord(WaypointHandle)
+                local x,y,z = coords.x,coords.y,coords.z 
+                local bottom,top = GetHeightmapBottomZForPosition(x,y), GetHeightmapTopZForPosition(x,y)
+                local steps = (top-bottom)/100
+                local foundGround
+                local height = bottom + 0.0
+                while not foundGround and height < top  do 
+                    SetPedCoordsKeepVehicle(PlayerPedId(), x,y, height )
+                    foundGround, zPos = GetGroundZFor_3dCoord(x,y, height )
+                    height = height + steps
+                    Wait(0)
+                end 
+                SetPedCoordsKeepVehicle(PlayerPedId(), x,y, height )
+                print('TP(Marker/GPS)',vector3(x,y, height))
+                    
                 ESX.ShowNotification("Teleported.")
             else
                 ESX.ShowNotification("Please place your waypoint.")
